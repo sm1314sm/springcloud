@@ -10,10 +10,7 @@ public class OnewayProducer {
         producer.setNamesrvAddr("localhost:9876");
         producer.start();
         for (int i = 0; i < 100; i++) {
-            Message msg = new Message("TopicTest",
-                    "TagB",
-                    ("Hello RocketMQ " + i).getBytes(RemotingHelper.DEFAULT_CHARSET)
-            );
+            Message msg = new Message("TopicTest", "TagB", ("Hello RocketMQ " + i).getBytes(RemotingHelper.DEFAULT_CHARSET));
             producer.sendOneway(msg);
         }
         Thread.sleep(5000);

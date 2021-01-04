@@ -14,14 +14,14 @@ public class AsyncProducer {
         DefaultMQProducer producer = new DefaultMQProducer("please_rename_unique_group_name");
         producer.setNamesrvAddr("localhost:9876");
         producer.start();
-        producer.setRetryTimesWhenSendAsyncFailed(0);
         int messageCount = 100;
         final CountDownLatch countDownLatch = new CountDownLatch(messageCount);
         for (int i = 0; i < messageCount; i++) {
             try {
                 final int index = i;
                 // 创建消息
-                Message msg = new Message("Jodie_topic_1023", "TagA", "OrderID188", "Hello world".getBytes(RemotingHelper.DEFAULT_CHARSET));
+                Message msg = new Message("TopicTest", "TagA", "OrderID188", "Hello world".getBytes(RemotingHelper.DEFAULT_CHARSET));
+                // 发送消息
                 producer.send(msg, new SendCallback() {
                     @Override
                     public void onSuccess(SendResult sendResult) {

@@ -11,9 +11,7 @@ public class SyncProducer {
         producer.setNamesrvAddr("localhost:9876");
         producer.start();
         for (int i = 0; i < 100; i++) {
-            Message msg = new Message("TopicTest",
-                    "TagA",
-                    ("Hello RocketMQ " + i).getBytes(RemotingHelper.DEFAULT_CHARSET));
+            Message msg = new Message("TopicTest", "TagC", ("Hello RocketMQ " + i).getBytes(RemotingHelper.DEFAULT_CHARSET));
             SendResult sendResult = producer.send(msg);
             System.out.printf("%s%n", sendResult);
         }
