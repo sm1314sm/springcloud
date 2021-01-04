@@ -13,7 +13,7 @@ public class OrderedProducer {
         String[] tags = new String[]{"TagA", "TagB", "TagC", "TagD", "TagE"};
         for (int i = 0; i < 100; i++) {
             int orderId = i % 10;
-            Message msg = new Message("TopicTestjjj", tags[i % tags.length], "KEY" + i,
+            Message msg = new Message("OrderTopic", tags[i % tags.length], "KEY" + i,
                     ("Hello RocketMQ " + i).getBytes(RemotingHelper.DEFAULT_CHARSET));
             SendResult sendResult = producer.send(msg, (mqs, msg1, arg) -> {
                 Integer id = (Integer) arg;

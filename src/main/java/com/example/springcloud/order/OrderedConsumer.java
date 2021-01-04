@@ -15,22 +15,18 @@ public class OrderedConsumer {
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("example_group_name");
         consumer.setNamesrvAddr("localhost:9876");
         consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
-        consumer.subscribe("TopicTest", "TagA || TagC || TagD");
+        consumer.subscribe("OrderTopic", "TagA || TagC || TagD");
         consumer.registerMessageListener(new MessageListenerOrderly() {
             AtomicLong consumeTimes = new AtomicLong(0);
 
             @Override
-            public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgs,
-                                                       ConsumeOrderlyContext context) {
-                context.setAutoCommit(false);
+            public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgs, ConsumeOrderlyContext context) {
                 System.out.printf(Thread.currentThread().getName() + " Receive New Messages: " + msgs + "%n");
                 consumeTimes.incrementAndGet();
-                if ((this.consumeTimes.get() % 2) == 0) {
+                if ((consumeTimes.get() % 2) == 0) {
                     return ConsumeOrderlyStatus.SUCCESS;
-                } else {
-                    context.setSuspendCurrentQueueTimeMillis(3000);
+                } else
                     return ConsumeOrderlyStatus.SUSPEND_CURRENT_QUEUE_A_MOMENT;
-                }
             }
         });
         consumer.start();
