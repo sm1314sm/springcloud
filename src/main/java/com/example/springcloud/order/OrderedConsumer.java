@@ -21,12 +21,20 @@ public class OrderedConsumer {
 
             @Override
             public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgs, ConsumeOrderlyContext context) {
+                context.setAutoCommit(false);
                 System.out.printf(Thread.currentThread().getName() + " Receive New Messages: " + msgs + "%n");
                 consumeTimes.incrementAndGet();
-                if ((consumeTimes.get() % 2) == 0) {
+                if ((this.consumeTimes.get() % 2) == 0) {
                     return ConsumeOrderlyStatus.SUCCESS;
-                } else
+                } else if ((this.consumeTimes.get() % 3) == 0) {
+                    return ConsumeOrderlyStatus.ROLLBACK;
+                } else if ((this.consumeTimes.get() % 4) == 0) {
+                    return ConsumeOrderlyStatus.COMMIT;
+                } else if ((this.consumeTimes.get() % 5) == 0) {
+                    context.setSuspendCurrentQueueTimeMillis(3000);
                     return ConsumeOrderlyStatus.SUSPEND_CURRENT_QUEUE_A_MOMENT;
+                }
+                return ConsumeOrderlyStatus.SUCCESS;
             }
         });
         consumer.start();
